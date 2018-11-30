@@ -20,22 +20,11 @@
  
 #include "display.h"
 
-/**
- * The Dispaly class is essentially a view model, binding RSSI state
- * information to a KS0108 chipset based LCD display.
- *
- * @constructor
- */
-
 Display::Display() {
-  u8g = new U8GLIB_ST7920_128X64_4X(10);
+  u8g = new U8GLIB_SSD1306_128X64 (U8G_I2C_OPT_NO_ACK);
   int _rawValues[3] = {0};
   int _activeChannel = 0;
 }
-
-/**
- * @destructor
- */
  
 Display::~Display() {
   if (NULL != u8g) {
@@ -43,24 +32,12 @@ Display::~Display() {
     u8g = NULL;
   }
 }
-
-/**
- * Updates a channel in the view model
- *
- * @param {uint8_t} channel  Channel number to update
- * @param {uint8_t} rawValue Raw RSSI value
- * @param {boolean} active   Indicates whether or not this is the active channel
- */
  
 void Display::updateChannel(uint8_t channel, uint8_t rawValue, boolean active) {
   _rawValues[channel] = rawValue;
   _activeChannel = (active ? channel : _activeChannel);
 }
 
-/**
- * Draw cycle routine
- */
- 
 void Display::drawCycle() {
   u8g->firstPage();
   do {
@@ -70,10 +47,6 @@ void Display::drawCycle() {
   } while (u8g->nextPage());
 }
 
-/**
- * Paints boxes and frames for segmenting information
- */
- 
 void Display::drawChrome() {
   u8g->setColorIndex(1);
   
@@ -88,10 +61,6 @@ void Display::drawChrome() {
   u8g->drawFrame(34, 36, 94, 17);
 }
 
-/**
- * Paints channel indicator and RSSI value text
- */
- 
 void Display::drawText() {
   String ch1 = String(_rawValues[0]) + "%";
   String ch2 = String(_rawValues[1]) + "%";
@@ -124,9 +93,6 @@ void Display::drawText() {
   u8g->drawStr(14, 62, "RSSI Diversity Controller");
 }
 
-/**
- * Paints strength bar indicators and active channel decorator
- */
  
 void Display::drawIndicators() {
   int yOffset = (_activeChannel * 19) - (_activeChannel == 2 ? 1 : 0); 
