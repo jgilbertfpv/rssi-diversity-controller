@@ -21,13 +21,13 @@
 #include <U8glib.h>
 #include "display.h"
 
-#define RSSI_CH0_PIN 14
-#define RSSI_CH1_PIN 15
-#define RSSI_CH2_PIN 16
+#define RSSI_CH0_PIN A0
+#define RSSI_CH1_PIN A1
+#define RSSI_CH2_PIN A2
 
-#define CONTROL_PIN_0 2
-#define CONTROL_PIN_1 3
-#define CONTROL_PIN_2 4
+#define CONTROL_PIN_0 7
+#define CONTROL_PIN_1 8
+#define CONTROL_PIN_2 9
 
 #define RSSI_LOW 493
 #define RSSI_HIGH 940
@@ -47,9 +47,6 @@ void setup () {
   Serial.begin(9600);
 }
 
-/**
- * Sets the active video channel
- */
 void setVideoOut(uint8_t activeChannel) {
   uint8_t control0val;
   uint8_t control1val;
@@ -78,10 +75,6 @@ void setVideoOut(uint8_t activeChannel) {
   digitalWrite(CONTROL_PIN_2, control2val);
 }
 
-
-/**
- * Diversity control and display loop
- */
 void loop(void) {
   int maxPct = 0;
   int activeChannel = 0;
@@ -108,11 +101,7 @@ void loop(void) {
   if (rawRssi[1] < RSSI_LOW_THRESHOLD) {
     rssiPct[1] = 0;
   } else {
-    rssiPct[1] = 100 - ((float)(rawRssi[1] - RSSI_LOW) / (float)(RSSI_HIGH - RSSI_LOW) * 100);
-    //Serial.println("raw rssi");
-    //Serial.println(rawRssi[1]);
-    //Serial.println("pct:");
-    //Serial.println(rssiPct[1]); 
+    rssiPct[1] = 100 - ((float)(rawRssi[1] - RSSI_LOW) / (float)(RSSI_HIGH - RSSI_LOW) * 100); 
     // Constrain to 0-100
     rssiPct[1] = rssiPct[1] < 0 ? 0 : rssiPct[1];
     rssiPct[1] = rssiPct[1] > 100 ? 100 : rssiPct[1];
@@ -145,4 +134,3 @@ void loop(void) {
   setVideoOut(activeChannel);
 
 }
-
