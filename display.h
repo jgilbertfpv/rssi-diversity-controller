@@ -21,7 +21,6 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
  
-#include <WProgram.h>
 #include <Arduino.h>
 #include <U8glib.h>
 
@@ -32,7 +31,7 @@ class Display {
     void drawCycle();
     void updateChannel(uint8_t channel, uint8_t rawValue, boolean active);
   private:
-    U8GLIB_ST7920_128X64_4X *u8g;
+    U8GLIB_SSD1306_128X64 *u8g;
     
     uint8_t _rawValues[3];
     uint8_t _activeChannel;
