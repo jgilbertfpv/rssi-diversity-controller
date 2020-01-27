@@ -29,11 +29,11 @@
 #define CONTROL_PIN_1 8
 #define CONTROL_PIN_2 9
 
-#define RSSI_LOW 493
-#define RSSI_HIGH 940
+#define RSSI_LOW 40
+#define RSSI_HIGH 320
 
 // If RSSI drops below threshold, assume not connected or no signal
-#define RSSI_LOW_THRESHOLD 300
+#define RSSI_LOW_THRESHOLD 75
 
 Display display;
 int rawRssi[3] = {};
@@ -88,7 +88,7 @@ void loop(void) {
   if (rawRssi[0] < RSSI_LOW_THRESHOLD) {
     rssiPct[0] = 0;
   } else {
-    rssiPct[0] = 100 - ((float)(rawRssi[0] - RSSI_LOW) / (float)(RSSI_HIGH - RSSI_LOW) * 100);
+    rssiPct[0] = ((float)(rawRssi[0] - RSSI_LOW) / (float)(RSSI_HIGH - RSSI_LOW) * 100);
     
     // Constrain to 0-100
     rssiPct[0] = rssiPct[0] < 0 ? 0 : rssiPct[0];
@@ -101,7 +101,7 @@ void loop(void) {
   if (rawRssi[1] < RSSI_LOW_THRESHOLD) {
     rssiPct[1] = 0;
   } else {
-    rssiPct[1] = 100 - ((float)(rawRssi[1] - RSSI_LOW) / (float)(RSSI_HIGH - RSSI_LOW) * 100); 
+    rssiPct[1] = ((float)(rawRssi[1] - RSSI_LOW) / (float)(RSSI_HIGH - RSSI_LOW) * 100); 
     // Constrain to 0-100
     rssiPct[1] = rssiPct[1] < 0 ? 0 : rssiPct[1];
     rssiPct[1] = rssiPct[1] > 100 ? 100 : rssiPct[1];
@@ -116,7 +116,7 @@ void loop(void) {
   if (rawRssi[2] < RSSI_LOW_THRESHOLD) {
     rssiPct[2] = 0;
   } else {
-    rssiPct[2] = 100 - ((float)(rawRssi[2] - RSSI_LOW) / (float)(RSSI_HIGH - RSSI_LOW) * 100);
+    rssiPct[2] = ((float)(rawRssi[2] - RSSI_LOW) / (float)(RSSI_HIGH - RSSI_LOW) * 100);
     
     // Constrain to 0-100
     rssiPct[2] = rssiPct[2] < 0 ? 0 : rssiPct[2];
